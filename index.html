@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dehara Project — Music | Create | Inspire</title>
+  <meta name="description" content="Produksi & aransemen musik Bali dan Indonesia, dikonstruksi ulang lintas genre." />
+  <meta property="og:title" content="Dehara Project" />
+  <meta property="og:description" content="Music | Create | Inspire" />
+  <meta property="og:url" content="https://deharaproject.com" />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#000000" />
+  <link rel="icon" type="image/png" href="./dehara-logo-icon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;1,9..40,300&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --black:      #000000;
+      --teal:       #00BCD4;
+      --amber:      #F5A623;
+      --white:      #FFFFFF;
+      --dim:        rgba(255,255,255,0.45);
+      --border:     rgba(255,255,255,0.07);
+      --teal-rgb:   0, 188, 212;
+      --amber-rgb:  245, 166, 35;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ─── CANVAS BG ─── */
+    #bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ─── LAYOUT ─── */
+    .page {
+      position: relative;
+      z-index: 1;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 28px;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 80px 0 48px;
+      text-align: center;
+    }
+
+    .logo-wrap {
+      width: 148px;
+      height: 148px;
+      margin-bottom: 36px;
+      opacity: 0;
+      transform: translateY(24px);
+      animation: rise 0.9s cubic-bezier(.16,1,.3,1) 0.1s forwards;
+    }
+    .logo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.2rem, 5.5vw, 3.6rem);
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      line-height: 1;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: rise 0.9s cubic-bezier(.16,1,.3,1) 0.25s forwards;
+    }
+    h1 .t { color: var(--teal); }
+    h1 .a { color: var(--amber); }
+
+    .tagline {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.38em;
+      color: var(--dim);
+      text-transform: uppercase;
+      margin-top: 14px;
+      opacity: 0;
+      animation: rise 0.9s cubic-bezier(.16,1,.3,1) 0.4s forwards;
+    }
+
+    .rule {
+      width: 56px;
+      height: 1px;
+      margin: 32px auto;
+      background: linear-gradient(90deg, var(--teal), var(--amber));
+      opacity: 0;
+      animation: fadein 0.8s ease 0.55s forwards;
+    }
+
+    .bio {
+      font-size: 0.97rem;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--dim);
+      line-height: 1.9;
+      max-width: 500px;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: rise 0.9s cubic-bezier(.16,1,.3,1) 0.65s forwards;
+    }
+
+    /* ─── SECTION LABEL ─── */
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.42em;
+      color: var(--teal);
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 22px;
+    }
+
+    /* ─── YOUTUBE FEATURE ─── */
+    .yt-section { padding: 0 0 20px; }
+
+    .yt-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 22px 26px;
+      border: 1px solid rgba(255,60,60,0.22);
+      border-radius: 10px;
+      text-decoration: none;
+      color: var(--white);
+      background: rgba(255,30,30,0.04);
+      transition: all 0.35s cubic-bezier(.16,1,.3,1);
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    .yt-card.visible {
+      animation: rise 0.7s cubic-bezier(.16,1,.3,1) forwards;
+    }
+    .yt-card:hover {
+      border-color: rgba(255,60,60,0.45);
+      background: rgba(255,30,30,0.09);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(255,0,0,0.12);
+    }
+
+    .yt-icon svg { width: 38px; height: 38px; fill: #FF3232; flex-shrink: 0; }
+
+    .yt-text { flex: 1; }
+    .yt-text h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+    }
+    .yt-text p {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--dim);
+      margin-top: 3px;
+    }
+
+    .yt-badge {
+      flex-shrink: 0;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #FF3232;
+      border: 1px solid rgba(255,50,50,0.4);
+      padding: 7px 14px;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+    .yt-card:hover .yt-badge {
+      background: #FF3232;
+      color: #fff;
+      border-color: #FF3232;
+    }
+
+    /* ─── SOCIAL GRID ─── */
+    .social-section { padding: 44px 0 0; }
+
+    .social-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 10px;
+    }
+
+    .s-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 15px 18px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--white);
+      background: rgba(255,255,255,0.018);
+      transition: all 0.32s cubic-bezier(.16,1,.3,1);
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    .s-card.visible {
+      animation: rise 0.6s cubic-bezier(.16,1,.3,1) forwards;
+    }
+    .s-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 20% 50%, var(--card-glow, rgba(0,188,212,0.12)), transparent 65%);
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+    .s-card:hover {
+      border-color: rgba(255,255,255,0.15);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 32px rgba(0,0,0,0.4);
+    }
+    .s-card:hover::after { opacity: 1; }
+
+    .s-icon {
+      width: 30px; height: 30px;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; z-index: 1;
+    }
+    .s-icon svg {
+      width: 22px; height: 22px;
+      fill: var(--card-color, var(--teal));
+      transition: transform 0.3s ease;
+    }
+    .s-card:hover .s-icon svg { transform: scale(1.18); }
+
+    .s-info { flex: 1; min-width: 0; position: relative; z-index: 1; }
+    .s-platform {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+    .s-handle {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      margin-top: 1px;
+    }
+    .s-arrow {
+      font-size: 0.75rem;
+      color: var(--dim);
+      transition: transform 0.3s ease, color 0.3s ease;
+      position: relative; z-index: 1;
+    }
+    .s-card:hover .s-arrow {
+      transform: translateX(4px);
+      color: var(--card-color, var(--teal));
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      padding: 56px 0 48px;
+      text-align: center;
+      margin-top: 52px;
+      border-top: 1px solid var(--border);
+    }
+    .f-logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+    .f-domain {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      color: var(--teal);
+      margin-top: 7px;
+    }
+    .f-copy {
+      font-size: 0.62rem;
+      color: rgba(255,255,255,0.2);
+      margin-top: 18px;
+      font-family: 'DM Mono', monospace;
+      letter-spacing: 0.08em;
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes rise {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadein {
+      to { opacity: 1; }
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 540px) {
+      h1 { letter-spacing: 0.1em; }
+      .social-grid { grid-template-columns: 1fr; }
+      .yt-badge { display: none; }
+      .logo-wrap { width: 120px; height: 120px; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="bg"></canvas>
+
+<div class="page">
+
+  <!-- ── HERO ── -->
+  <section class="hero">
+    <div class="logo-wrap">
+      <img src="./dehara-project-logo-square.png" alt="Dehara Project Logo" />
+    </div>
+
+    <h1><span class="t">Dehara</span>&nbsp;<span class="a">Project</span></h1>
+    <p class="tagline">Music &nbsp;·&nbsp; Create &nbsp;·&nbsp; Inspire</p>
+    <div class="rule"></div>
+    <p class="bio">
+      Produksi &amp; aransemen musik Bali dan Indonesia,<br />
+      dikonstruksi ulang lintas genre.
+    </p>
+  </section>
+
+  <!-- ── YOUTUBE ── -->
+  <section class="yt-section">
+    <p class="section-label">YouTube Channel</p>
+    <a href="https://www.youtube.com/@DeharaProject" target="_blank" rel="noopener noreferrer" class="yt-card" data-reveal>
+      <div class="yt-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+        </svg>
+      </div>
+      <div class="yt-text">
+        <h3>Dehara Project</h3>
+        <p>youtube.com/@DeharaProject</p>
+      </div>
+      <span class="yt-badge">Subscribe ↗</span>
+    </a>
+  </section>
+
+  <!-- ── SOCIAL ── -->
+  <section class="social-section">
+    <p class="section-label">Find Us Everywhere</p>
+    <div class="social-grid">
+
+      <a href="https://www.instagram.com/deharaproject" target="_blank" rel="noopener noreferrer"
+         class="s-card" style="--card-color:#E1306C; --card-glow:rgba(225,48,108,0.12);" data-reveal>
+        <div class="s-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+        </div>
+        <div class="s-info">
+          <div class="s-platform">Instagram</div>
+          <div class="s-handle">@deharaproject</div>
+        </div>
+        <span class="s-arrow">→</span>
+      </a>
+
+      <a href="https://fb.com/deharaproject" target="_blank" rel="noopener noreferrer"
+         class="s-card" style="--card-color:#1877F2; --card-glow:rgba(24,119,242,0.12);" data-reveal>
+        <div class="s-icon">
+          <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </div>
+        <div class="s-info">
+          <div class="s-platform">Facebook</div>
+          <div class="s-handle">/deharaproject</div>
+        </div>
+        <span class="s-arrow">→</span>
+      </a>
+
+      <a href="https://www.tiktok.com/@deharaproject" target="_blank" rel="noopener noreferrer"
+         class="s-card" style="--card-color:#69C9D0; --card-glow:rgba(105,201,208,0.12);" data-reveal>
+        <div class="s-icon">
+          <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+        </div>
+        <div class="s-info">
+          <div class="s-platform">TikTok</div>
+          <div class="s-handle">@deharaproject</div>
+        </div>
+        <span class="s-arrow">→</span>
+      </a>
+
+      <a href="https://x.com/deharaproject" target="_blank" rel="noopener noreferrer"
+         class="s-card" style="--card-color:#FFFFFF; --card-glow:rgba(255,255,255,0.07);" data-reveal>
+        <div class="s-icon">
+          <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </div>
+        <div class="s-info">
+          <div class="s-platform">X / Twitter</div>
+          <div class="s-handle">@deharaproject</div>
+        </div>
+        <span class="s-arrow">→</span>
+      </a>
+
+      <a href="https://soundcloud.com/deharaproject" target="_blank" rel="noopener noreferrer"
+         class="s-card" style="--card-color:#FF5500; --card-glow:rgba(255,85,0,0.12);" data-reveal>
+        <div class="s-icon">
+          <svg viewBox="0 0 24 24"><path d="M11.56 8.87V17h8.76c1.05-.01 1.68-.62 1.68-1.56 0-.76-.47-1.39-1.14-1.62v-.08c.13-.27.2-.58.2-.9 0-1.17-.96-2.12-2.15-2.12-.16 0-.31.02-.46.05-.33-1.3-1.52-2.27-2.94-2.27-1.1 0-2.06.56-2.62 1.4-.04.02-.08.02-.12.02l-.21-.05zM2.5 13.58c0 .85.69 1.54 1.54 1.54s1.54-.69 1.54-1.54-.69-1.54-1.54-1.54-1.54.69-1.54 1.54zm1.02-3.16c0-.57.46-1.03 1.03-1.03.57 0 1.03.46 1.03 1.03v5.31c0 .57-.46 1.03-1.03 1.03-.57 0-1.03-.46-1.03-1.03V10.42zm2.52-1.36c0-.63.51-1.15 1.15-1.15.63 0 1.15.51 1.15 1.15v7.49c0 .63-.51 1.15-1.15 1.15-.63 0-1.15-.51-1.15-1.15V9.06zm2.53-.02c0-.63.51-1.15 1.15-1.15.63 0 1.15.51 1.15 1.15v7.53c0 .63-.51 1.15-1.15 1.15-.63 0-1.15-.51-1.15-1.15V9.04zm-7.57 4.2c0-.37.3-.67.67-.67.37 0 .67.3.67.67v2.3c0 .37-.3.67-.67.67-.37 0-.67-.3-.67-.67v-2.3z"/></svg>
+        </div>
+        <div class="s-info">
+          <div class="s-platform">SoundCloud</div>
+          <div class="s-handle">/deharaproject</div>
+        </div>
+        <span class="s-arrow">→</span>
+      </a>
+
+      <a href="https://www.threads.com/@deharaproject" target="_blank" rel="noopener noreferrer"
+         class="s-card" style="--card-color:#AAAAAA; --card-glow:rgba(170,170,170,0.08);" data-reveal>
+        <div class="s-icon">
+          <svg viewBox="0 0 24 24"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.02c.03-3.579.858-6.43 2.523-8.482C5.868 1.2 8.615.024 12.186 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.783 3.631 2.698 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.964-.065-1.19.408-2.285 1.33-3.082.88-.76 2.119-1.207 3.583-1.291a13.853 13.853 0 0 1 3.02.142c-.126-.742-.375-1.332-.75-1.757-.513-.586-1.308-.883-2.359-.89h-.029c-.844 0-1.992.232-2.721 1.32L7.734 9.231c.98-1.454 2.568-2.128 4.446-2.128h.037c1.48.01 2.7.45 3.559 1.468.73.856 1.143 2.086 1.22 3.664.298.186.576.387.835.604 1.271 1.035 1.995 2.526 2.026 4.253.047 2.637-1.036 4.688-3.113 5.956-1.441.888-3.179 1.336-5.19 1.336zm.014-9.083c-.096 0-.191.004-.286.01-1.813.106-2.904.837-2.85 1.913.065 1.265 1.526 1.644 2.651 1.584 1.965-.108 2.773-1.266 2.797-3.64a11.712 11.712 0 0 0-2.312-.867z"/></svg>
+        </div>
+        <div class="s-info">
+          <div class="s-platform">Threads</div>
+          <div class="s-handle">@deharaproject</div>
+        </div>
+        <span class="s-arrow">→</span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="f-logo">Dehara Project</div>
+    <div class="f-domain">deharaproject.com</div>
+    <div class="f-copy">© 2025 Dehara Project. All rights reserved.</div>
+  </footer>
+
+</div>
+
+<script>
+  /* ── ANIMATED WAVEFORM BACKGROUND ── */
+  (function () {
+    const canvas = document.getElementById('bg');
+    const ctx = canvas.getContext('2d');
+
+    function resize() {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    const waves = [
+      { color: '0,188,212',  yFrac: 0.28, amp: 55, freq: 0.0055, speed: 0.012, phase: 0,   alpha: 0.12 },
+      { color: '245,166,35', yFrac: 0.72, amp: 45, freq: 0.0045, speed: 0.009, phase: 1.4, alpha: 0.10 },
+      { color: '0,188,212',  yFrac: 0.50, amp: 28, freq: 0.009,  speed: 0.018, phase: 2.8, alpha: 0.07 },
+      { color: '245,166,35', yFrac: 0.38, amp: 18, freq: 0.014,  speed: 0.022, phase: 0.6, alpha: 0.05 },
+    ];
+
+    let t = 0;
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      waves.forEach(w => {
+        ctx.beginPath();
+        ctx.strokeStyle = `rgba(${w.color},${w.alpha})`;
+        ctx.lineWidth   = 1.5;
+        const baseY = canvas.height * w.yFrac;
+        for (let x = 0; x <= canvas.width; x += 2) {
+          const y = baseY
+            + Math.sin(x * w.freq + t * w.speed + w.phase) * w.amp
+            + Math.sin(x * w.freq * 2.1 + t * w.speed * 1.5 + w.phase) * (w.amp * 0.28);
+          x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+      });
+      t++;
+      requestAnimationFrame(draw);
+    }
+    draw();
+  })();
+
+  /* ── SCROLL REVEAL ── */
+  (function () {
+    const items = document.querySelectorAll('[data-reveal]');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          const idx = Array.from(items).indexOf(entry.target);
+          setTimeout(() => entry.target.classList.add('visible'), idx * 70);
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    items.forEach(el => io.observe(el));
+  })();
+</script>
+
+</body>
+</html>
